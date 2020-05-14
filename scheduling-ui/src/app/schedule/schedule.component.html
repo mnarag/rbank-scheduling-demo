@@ -1,0 +1,104 @@
+
+<div style="margin: auto; width: 700px;">
+  
+  <div #application>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group row">
+          <label class="col-3 col-form-label text-right">Project Name:</label>
+          <div class="col-4">
+            <input class="form-control" type="text" [(ngModel)]="projectPlan.projectName"/>
+          </div>
+
+          <label class="col-2 col-form-label text-right">Start Date:</label>
+          <div class="col-3">
+            <input class="form-control" type="date" [(ngModel)]="projectPlan.startDate"/>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <label>Task List:</label>
+    </div>
+
+    <iui-treeview [items]="items" [appRef]="applicationRef" [controlStyle]="ctrlStyle" #treeview>
+        <ng-template let-item>
+            <div (mouseenter)="hoverItem=item" (mouseleave)="hoverItem=null">
+              <div class="row" *ngIf="item!=editItem" (mouseup)="showEditor(item)">
+                <div class="col-5">
+                  <span>Task Name: {{item.taskName}}</span>
+                </div>
+                <div class="col-3">
+                  <span>Duration: {{item.duration}}</span>
+                </div>
+              </div>
+
+              <div class="row" *ngIf="item==editItem">
+                <div class="col-6">
+                  <div class="form-group row">
+                    <label class="col-4 col-form-label text-right">Task Name:</label>
+                    <div class="col-8">
+                      <input class="form-control" type="text" [(ngModel)]="item.taskName" (keydown)="editorKeyDown($event)" [iuiFocus]="editorFocused" (focus)="selectContent($event)" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="form-group row">
+                    <label class="col-4 col-form-label text-right">Duration:</label>
+                    <div class="col-8">
+                      <input class="form-control" type="text" [(ngModel)]="item.duration" (keydown)="editorKeyDown($event)" [iuiFocus]="editorFocused" (focus)="selectContent($event)" />
+                    </div>
+                  </div>
+                </div>
+                <div clas="col-2">
+                  <button type="button" class="btn btn-primary" (click)="editorLostFocus()">Save</button>
+                </div>
+              </div>
+                
+                
+                <div class="trw-add-dynamic-toolbar" *ngIf="!isEditActive && item==hoverItem">
+                    <span class="trw-add-dynamic-item-button trw-add-dynamic-item-button-delete" (click)="deleteItem(item)"></span>
+                    <span class="trw-add-dynamic-item-button trw-add-dynamic-item-button-add-child" (click)="addChild(item)"></span>
+                    <span class="trw-add-dynamic-item-button trw-add-dynamic-item-button-add-root" (click)="addRoot()"></span>
+                </div>
+            </div>
+        </ng-template>
+    </iui-treeview>
+
+    <div class="row" style="margin-top:20px;">
+      <button type="button" class="btn btn-primary" (click)="createSchedule()">Create Schedule</button>
+    </div>
+
+
+    <div class="row" style="margin-top:60px;" *ngIf="schedule.tasks.length > 0">
+
+      <div>
+        Generated Schedule:
+      </div>
+
+      <table class="table table-stripped">
+        <thead>
+          <tr>
+            <th scope="col">Task Name</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Duration (days)</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let task of schedule.tasks">
+          <tr>
+            <td>{{ task.taskName }}</td>
+            <td>{{ task.startDate | date: 'MMM dd yyyy' }}</td>
+            <td>{{ task.endDate | date: 'MMM dd yyyy' }}</td>
+            <td>{{ task.duration }}</td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+  

@@ -1,0 +1,135 @@
+.page-title-box {
+  background: none;
+  box-shadow: none;
+}
+
+.page-title {
+  font-size: 25px;
+}
+
+.card.main-card {
+  border: none;
+  border-radius: 0;
+  border-top: 4px solid $green-primary;
+
+  .card-header {
+    background-color: white;
+    border-bottom: none;
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+
+// Buttons
+.btn:focus {
+  box-shadow: none;
+}
+
+.btn-primary {
+  &:disabled, &.disabled {
+    color: #fff;
+    background-color: #c0c0c0;
+    border-color: #c0c0c0;
+
+    &:hover {
+      color: #fff;
+      cursor: default;
+      background-color: #c0c0c0 !important;
+      border-color: #c0c0c0;
+    }
+  }
+}
+
+.swal2-styled.swal2-confirm {
+  background-color: $green-primary !important;
+}
+
+// Errors
+.whole-content-error {
+  color: red;
+
+  .card {
+    width: 100%;
+    text-align: center;
+    padding: 10%;
+
+    .mdi {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.tab-content-error {
+  color: red;
+  width: 100%;
+  text-align: center;
+  padding: 10%;
+
+  .mdi {
+    font-size: 30px;
+    margin-bottom: 10px;
+  }
+}
+
+// Empty
+.empty-content {
+  .card {
+    width: 100%;
+    text-align: center;
+    padding: 10%;
+
+    .mdi {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.tab-content {
+  .empty {
+    width: 100%;
+    text-align: center;
+    padding: 10%;
+  }
+}
+
+// Datatable
+.ngx-datatable a {
+  color: $green-primary;
+
+  &:hover {
+    color: darken($green-primary, 5%);
+  }
+}
+
+// Tabs
+.tabs-bordered li a.active {
+  border-bottom: 2px solid #71be43 !important;
+}
+
+// Error highlighting
+.ng-invalid.ng-touched {
+  border-color: red !important;
+
+  > .ng-select-container,
+  > .bsDatepicker {
+    border-color: red !important;
+  }
+}
+
+// Hide spinner button
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.spinner-border.center {
+  margin: auto !important;
+}
+
+.modal-body .html-template-content {
+  overflow: auto;
+}
