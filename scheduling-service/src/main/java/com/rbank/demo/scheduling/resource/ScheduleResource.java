@@ -18,7 +18,7 @@ public class ScheduleResource {
     private ScheduleService service;
 
     @PostMapping
-    public ResponseEntity<Schedule> createSchedule(@RequestBody ProjectPlan plan) {
+    public ResponseEntity<Schedule> createSchedule(@RequestBody ProjectPlan plan) throws Exception {
         return ResponseEntity.ok(service.createSchedule(plan));
     }
 }

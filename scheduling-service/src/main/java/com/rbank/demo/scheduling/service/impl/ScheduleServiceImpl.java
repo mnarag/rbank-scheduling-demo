@@ -16,7 +16,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private Deque<Task> queue = new ArrayDeque<Task>();
 
     @Override
-    public Schedule createSchedule(ProjectPlan plan) {
+    public Schedule createSchedule(ProjectPlan plan) throws Exception {
         queue = new ArrayDeque<Task>();
 
         // Sort task based on dependency
@@ -25,6 +25,10 @@ public class ScheduleServiceImpl implements ScheduleService {
             if (task.getItems() != null && !task.getItems().isEmpty()) {
                 getSortedTasks(task.getItems());
             }
+        }
+
+        if (hasDuplicateTaskName()) {
+            throw new Exception("Duplicate Task Name");
         }
 
         // Assign start and end date schedule based on duration and task dependency
@@ -80,5 +84,17 @@ public class ScheduleServiceImpl implements ScheduleService {
         return taskDependencies.stream()
                     .sorted(Comparator.comparing(TaskSchedule::getEndDate).reversed())
                     .findFirst().orElse(null);
+    }
+
+    private boolean hasDuplicateTaskName() {
+        List<String> taskNames = new ArrayList<String>();
+        for (Task task: queue) {
+            if (taskNames.contains(task.getTaskName().toLowerCase())) {
+                return true;
+            }
+            taskNames.add(task.getTaskName().toLowerCase());
+        }
+
+        return false;
     }
 }

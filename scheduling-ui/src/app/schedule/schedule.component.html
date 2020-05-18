@@ -19,6 +19,10 @@
       </div>
     </div>
 
+    <div class="row" style="color:red" *ngIf="errorMessage">
+      <label>{{ errorMessage }}</label><br/><br/>
+    </div>
+
     <div class="row">
       <label>Task List:</label>
     </div>
@@ -68,7 +72,8 @@
     </iui-treeview>
 
     <div class="row" style="margin-top:20px;">
-      <button type="button" class="btn btn-primary" (click)="createSchedule()">Create Schedule</button>
+      <button type="button" class="btn btn-primary" (click)="createSchedule()" [disabled]="hasError">Create Schedule</button>
+      <button style="margin-left: 10px" type="button" class="btn btn-secondary" (click)="resetSchedule()" >Reset</button>
     </div>
 
 

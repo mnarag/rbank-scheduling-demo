@@ -5,7 +5,7 @@ import com.rbank.demo.scheduling.model.Schedule;
 
 public interface ScheduleService {
 
-    Schedule createSchedule(ProjectPlan plan);
+    Schedule createSchedule(ProjectPlan plan) throws Exception;
 
     void consolePrintSchedule(Schedule schedule);
 }

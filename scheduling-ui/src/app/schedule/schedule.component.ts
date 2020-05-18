@@ -19,6 +19,10 @@ export class ScheduleComponent implements OnInit {
   public editorFocused = false;
   public hoverItem: any = null;
   private itemCount = 1;
+  private itemNames: Array<any> = [];
+  public errorMessage: string;
+  public hasError = false;
+
   public projectPlan: any = {
     projectName: 'Project XXX',
     startDate: '2020-05-01'
@@ -41,7 +45,25 @@ export class ScheduleComponent implements OnInit {
   ngOnInit() {
     this.items = [
       { taskName: 'Task 1', duration: 1}
-  ];
+    ];
+    this.projectPlan = {
+      projectName: 'Project XXX',
+      startDate: new Date().toISOString().substr(0, 10)
+    };
+    this.schedule = {
+      projectPlan: '',
+      tasks: []
+    };
+
+    this.isEditActive = false;
+    this.editItem = null;
+    this.originalText = '';
+    this.editorFocused = false;
+    this.hoverItem = null;
+    this.itemCount = 1;
+    this.itemNames = [];
+    this.errorMessage = null;
+    this.hasError = false;
   }
 
   // Add/Remove ------------------------------------------------------------------------
@@ -49,7 +71,7 @@ export class ScheduleComponent implements OnInit {
   createNewItem() {
       this.itemCount++;
 
-      return { taskName: 'Task ' + this.itemCount };
+      return { taskName: 'Task ' + this.itemCount, duration: 1 };
   }
 
   addRoot() {
@@ -93,14 +115,30 @@ export class ScheduleComponent implements OnInit {
   }
 
   closeEditor() {
+    this.hasError = false;
+    this.errorMessage = null;
+    this.itemNames = [];
+    this.getTaskDependency(this.items);
+
+    if (!this.editItem.duration || this.editItem.duration < 1) {
+      this.hasError = true;
+      this.errorMessage = 'Duration is required';
+    }
+    if (!this.editItem.taskName || this.editItem.taskName.trim() === '') {
+      this.hasError = true;
+      this.errorMessage = 'Task Name is required';
+    }
+
+    if (!this.hasError) {
       if (this.editItem) {
-          this.editItem.allowDrag = true;
+        this.editItem.allowDrag = true;
       }
 
       this.editItem = null;
       this.originalText = '';
       this.editorFocused = false;
       this.isEditActive = false;
+    }
   }
 
   editorKeyDown(e: any) {
@@ -122,10 +160,29 @@ export class ScheduleComponent implements OnInit {
     this.closeEditor();
   }
 
+  getTaskDependency(items) {
+    for (const item of items) {
+      if (this.itemNames.includes(item.taskName.toLowerCase())) {
+        this.errorMessage = 'Duplicate task name';
+        this.hasError = true;
+        break;
+      }
+
+      this.itemNames.push(item.taskName.toLowerCase());
+      if (item.items) {
+        this.getTaskDependency(item.items);
+      }
+    }
+  }
+
   createSchedule() {
     this.projectPlan.tasks = this.items;
     this.scheduleService.createSchedule(this.projectPlan).subscribe(data => {
       this.schedule = data;
     });
+  }
+
+  resetSchedule() {
+    this.ngOnInit();
   }
 }
